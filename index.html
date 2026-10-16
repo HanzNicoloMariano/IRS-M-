@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Incident Reporting System</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Incident Reporting System</h1>
+  <small>Hanz Nicolo Mariano - BSIT3A - Laboratories 1 to 20</small>
+  <nav>
+    <button onclick="showPage('home')">Home</button>
+    <button onclick="showPage('database')">Database</button>
+    <button onclick="showPage('reporters')">Reporters</button>
+    <button onclick="showPage('classify')">Categories &amp; Types</button>
+    <button onclick="showPage('incidents')">Incidents</button>
+    <button onclick="showPage('locations')">Locations</button>
+    <button onclick="showPage('investigations')">Investigations</button>
+    <button onclick="showPage('findings')">Findings &amp; RCA</button>
+    <button onclick="showPage('evidence')">Evidence</button>
+    <button onclick="showPage('actions')">Actions</button>
+  </nav>
+</header>
+
+<main>
+<!-- Lab 1 -->
+<section id="home" class="page">
+  <h2>Home</h2>
+  <p>Workflow: Reporter, Incident, Location, Investigation, Action, Resolution, Reports.</p>
+  <div id="stats" class="stats"></div>
+  <button onclick="testConnection()">Test Database Connection</button>
+  <p id="homeMsg"></p>
+</section>
+
+<!-- Labs 2 and 3 -->
+<section id="database" class="page">
+  <h2>Database Design</h2>
+  <h3>Relationships</h3>
+  <pre>Reporter 1 --- * Incident * --- 1 Location
+Incident 1 --- 1 Investigation
+Investigation 1 --- * Findings, Evidence, Actions</pre>
+  <h3>Data Dictionary</h3>
+  <div id="dictionary"></div>
+  <button onclick="testRelations()">Test Relationships</button>
+  <button class="gray" onclick="resetData()">Reset Data</button>
+  <p id="dbMsg"></p>
+</section>
+
+<!-- Labs 4, 5 and 6 -->
+<section id="reporters" class="page">
+  <h2>Reporters</h2>
+  <div class="form">
+    <input type="hidden" id="r_id">
+    <label>Employee/Student ID <input id="r_sid"></label>
+    <label>Full Name <input id="r_name"></label>
+    <label>Department <select id="r_dept"></select></label>
+    <label>Position <input id="r_position"></label>
+    <label>Contact Number <input id="r_phone"></label>
+    <label>Email <input id="r_email"></label>
+    <label>Address <input id="r_address"></label>
+    <label>Reporter Type
+      <select id="r_type">
+        <option value="">Select type</option>
+          <option>Employee</option>
+            <option>Student</option>
+          <option>Visitor</option>
+        <option>Contractor</option>
+      </select>
+    </label>
+  </div>
+  <button onclick="saveReporter()">Save Reporter</button>
+  <button class="gray" onclick="clearReporter()">Clear</button>
+  <p id="r_msg"></p>
+  <div class="filters">
+    <input id="r_search" placeholder="Search by name or ID" oninput="showReporters()">
+    <select id="r_fdept" onchange="showReporters()"></select>
+    <select id="r_ftype" onchange="showReporters()">
+      <option value="">All types</option>
+        <option>Employee</option>
+          <option>Student</option>
+        <option>Visitor</option>
+      <option>Contractor</option>
+    </select>
+  </div>
+  <div id="r_table" class="scroll"></div>
+  <div id="r_profile"></div>
+</section>
+
+<!-- Lab 7 -->
+<section id="classify" class="page">
+  <h2>Incident Categories</h2>
+  <div class="form">
+    <input type="hidden" id="c_id">
+    <label>Category Name <input id="c_name"></label>
+  </div>
+  <button onclick="saveCategory()">Save Category</button>
+  <p id="c_msg"></p>
+  <div id="c_table" class="scroll"></div>
+  <h2>Incident Types</h2>
+  <div class="form">
+    <input type="hidden" id="t_id">
+    <label>Type Name <input id="t_name"></label>
+    <label>Category <select id="t_cat"></select></label>
+  </div>
+  <button onclick="saveType()">Save Type</button>
+  <p id="t_msg"></p>
+  <div id="t_table" class="scroll"></div>
+</section>
+
+<!-- Labs8,9,10and12 -->
+<section id="incidents" class="page">
+  <h2>Incidents</h2>
+  <div class="form">
+    <label>Reporter <select id="i_reporter"></select></label>
+    <label>Category <select id="i_category" onchange="fillTypes()"></select></label>
+    <label>Type <select id="i_type"></select></label>
+    <label>Location <select id="i_location"></select></label>
+    <label>Date of Incident <input type="date" id="i_date"></label>
+    <label>Time of Incident <input type="time" id="i_time"></label>
+    <label>Severity
+      <select id="i_severity">
+        <option value="">Select severity</option>
+          <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+          <option>Critical</option>
+      </select>
+    </label>
+    <label>Description <textarea id="i_desc"></textarea></label>
+    <label>Immediate Response <textarea id="i_response"></textarea></label>
+  </div>
+  <button onclick="saveIncident()">Save Incident</button>
+  <p id="i_msg"></p>
+  <div class="filters">
+    <input id="i_search" placeholder="Search number, reporter, type" oninput="showIncidents()">
+    <input type="date" id="i_fdate" onchange="showIncidents()">
+    <select id="i_fcat" onchange="showIncidents()"></select>
+    <select id="i_floc" onchange="showIncidents()"></select>
+    <select id="i_fsev" onchange="showIncidents()">
+      <option value="">All severity</option>
+        <option>Low</option>
+          <option>Medium</option>
+            <option>High</option>
+          <option>Critical</option>
+    </select>
+    <select id="i_fstatus" onchange="showIncidents()">
+      <option value="">All status</option>
+        <option>Open</option>
+          <option>Under Investigation</option>
+            <option>Resolved</option>
+          <option>Closed</option>
+    </select>
+  </div>
+  <div id="i_table" class="scroll"></div>
+</section>
+
+<!-- Labs 11To13 -->
+<section id="locations" class="page">
+  <h2>Locations</h2>
+  <div class="form">
+    <input type="hidden" id="l_id">
+    <label>
+      Building <input id="l_building">
+    </label>
+    <label>
+      Room/Office <input id="l_room">
+    </label>
+    <label>
+      Area <input id="l_area">
+    </label>
+    <label>
+      Department <select id="l_dept"></select>
+    </label>
+    <label>
+      Floor <input id="l_floor">
+    </label>
+    <label>
+      Description <input id="l_desc">
+    </label>
+  </div>
+  <button onclick="saveLocation()">Save Location</button>
+  <p id="l_msg"></p>
+  <input id="l_search" placeholder="Search location" oninput="showLocations()">
+  <div id="l_table" class="scroll"></div>
+  <h3>Location Monitoring</h3>
+  <div id="l_monitor" class="scroll"></div>
+</section>
+
+<!-- Labs14,15and18 -->
+<section id="investigations" class="page">
+  <h2>Investigations</h2>
+  <div class="form">
+    <label>Incident <select id="v_incident"></select></label>
+    <label>Investigator <input id="v_investigator"></label>
+    <label>Start Date <input type="date" id="v_start"></label>
+    <label>Target Completion Date <input type="date" id="v_target"></label>
+    <label>Instructions <textarea id="v_notes"></textarea></label>
+  </div>
+  <button onclick="saveInvestigation()">Assign Investigation</button>
+  <p id="v_msg"></p>
+  <div id="v_table" class="scroll"></div>
+</section>
+
+<!-- Labs16To19 -->
+<section id="findings" class="page">
+  <h2>Findings and Root Cause Analysis</h2>
+  <div class="form">
+    <label>
+      Investigation <select id="f_inv"></select>
+    </label>
+    <label>
+      Problem <textarea id="f_problem"></textarea>
+    </label>
+    <label>
+      Findings <textarea id="f_findings"></textarea>
+    </label>
+    <label>
+      Immediate Cause <textarea id="f_immediate"></textarea>
+    </label>
+    <label>
+      Root Cause <textarea id="f_root"></textarea>
+    </label>
+    <label>
+      Contributing Factors <textarea id="f_contrib"></textarea>
+    </label>
+    <label>
+      Witnesses <input id="f_witness">
+    </label>
+    <label>
+      Recommended Preventive Measures <textarea id="f_rec"></textarea>
+    </label>
+  </div>
+  <button onclick="saveFinding()">Save Findings</button>
+  <p id="f_msg"></p>
+  <div id="f_table" class="scroll"></div>
+</section>
+
+<!-- Lab 17 -->
+<section id="evidence" class="page">
+  <h2>Evidence</h2>
+  <div class="form">
+    <label>Investigation <select id="e_inv"></select></label>
+    <label>Document or Photo <input type="file" id="e_file"></label>
+    <label>Uploaded By <input id="e_by"></label>
+    <label>Description <input id="e_desc"></label>
+  </div>
+  <button onclick="saveEvidence()">Save Evidence</button>
+  <p id="e_msg"></p>
+  <div id="e_table" class="scroll"></div>
+</section>
+
+<!-- Lab 20 -->
+<section id="actions" class="page">
+  <h2>Corrective Actions</h2>
+  <div class="form">
+    <label>Investigation <select id="a_inv"></select></label>
+    <label>Action Type
+      <select id="a_type">
+        <option value="">Select type</option>
+        <option>Corrective Action</option>
+        <option>Preventive Action</option>
+        <option>Safety Improvement</option>
+        <option>Equipment Repair</option>
+        <option>Policy Improvement</option>
+        <option>Training</option>
+        <option>Process Improvement</option>
+      </select>
+    </label>
+    <label>Description <textarea id="a_desc"></textarea></label>
+    <label>Responsible Person <input id="a_person"></label>
+    <label>Target Date <input type="date" id="a_target"></label>
+    <label>Priority
+      <select id="a_priority">
+        <option value="">Select priority</option>
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+        <option>Urgent</option>
+      </select>
+    </label>
+  </div>
+  <button onclick="saveAction()">Save Action</button>
+  <p id="a_msg"></p>
+  <div id="a_table" class="scroll"></div>
+</section>
+</main>
+
+<div id="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
