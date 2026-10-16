@@ -96,7 +96,7 @@ label
 input, select, textarea 
 { 
   padding: 7px; 
-  font-size: 14px; 
+  font-size: 15px; 
   border: 1px solid var(--line); 
   border-radius: 6px; 
   background: var(--bg); 
