@@ -3,7 +3,7 @@
 // Lab 1
 let db = JSON.parse(localStorage.getItem("irs")) || startData();
 let currentPage = "home";
-//if (!db.courses) db.courses = defaultCourses();
+if (!db.courses) db.courses = defaultCourses();
 
 
 function startData() {
@@ -14,7 +14,7 @@ function startData() {
       { id: 5, name: "Student Affairs" }
     ],
     
-    //courses: defaultCourses(),
+    courses: defaultCourses(),
     categories: ["Safety", "Security", "Accident", "Property Damage", "Workplace", "IT/Technical", "Environmental", "Health", "Other"]
       .map((n, i) => ({ id: i + 1, name: n, active: true })),
     types: [["Slip/Fall", 1], ["Equipment Failure", 6], ["Theft", 2], ["Unauthorized Access", 2],
@@ -79,7 +79,8 @@ function fillAll() {
   fillSelect
   ("r_fdept", db.departments, x => x.name, "All departments")
   ;
-  //fillSelect("r_course", db.courses, x => x.name, "Select course");
+  fillSelect("r_course", db.courses, x => x.name, "Select course")
+  ;
   fillSelect
   ("t_cat", active(db.categories), x => x.name, "Select category")
   ;
@@ -132,9 +133,8 @@ function showPage(page) {
   if (page == "investigations") showInvestigations();
   if (page == "findings") showFindings();
   if (page == "evidence") showEvidence();
-  if (page == "actions") showActions();
-  
-  //if (page == "courses") showCourses();
+  if (page == "actions") showActions();  
+  if (page == "courses") showCourses();
   
 }
 
@@ -198,9 +198,9 @@ function saveReporter() {
   const r = {
     sid: v("r_sid"), name: v("r_name"), dept: v("r_dept"), position: v("r_position"),
     phone: v("r_phone"), email: v("r_email"), address: v("r_address"), type: v("r_type"),
-    course: v("r_course") // ADDED (Course Step 5)
+    course: v("r_course") 
   };
-  //if (r.sid == "" || r.name == "" || r.dept == "" || r.phone == "" || r.type == "" || r.course == "") { 
+  if (r.sid == "" || r.name == "" || r.dept == "" || r.phone == "" || r.type == "" || r.course == "") { 
     msg("r_msg", "ID, name, department, course, contact number and type are required.", false);
     return;
   }
@@ -220,7 +220,7 @@ function saveReporter() {
 }
 
 function clearReporter() {
- // ["r_id", "r_sid", "r_name", "r_dept", "r_position", "r_phone", "r_email", "r_address", "r_type", "r_course"].forEach(i => setv(i, "")); 
+ ["r_id", "r_sid", "r_name", "r_dept", "r_position", "r_phone", "r_email", "r_address", "r_type", "r_course"].forEach(i => setv(i, "")); 
   msg("r_msg", "", true);
 }
 
@@ -231,9 +231,9 @@ function showReporters() {
     (s == "" || r.name.toLowerCase().includes(s) || r.sid.toLowerCase().includes(s)) &&
     (v("r_fdept") == "" || r.dept == v("r_fdept")) &&
     (v("r_ftype") == "" || r.type == v("r_ftype")));
-  //drawTable("r_table", ["ID", "Name", "Course", "Department", "Type", "Contact", "Status", "Actions"] , list.map(r => ({
+  drawTable("r_table", ["ID", "Name", "Course", "Department", "Type", "Contact", "Status", "Actions"] , list.map(r => ({
     off: !r.active,
-  //cells: [r.sid, r.name, nameOf(db.courses, r.course), nameOf(db.departments, r.dept), r.type, r.phone, r.active ? "Active" : "Inactive",
+  cells: [r.sid, r.name, nameOf(db.courses, r.course), nameOf(db.departments, r.dept), r.type, r.phone, r.active ? "Active" : "Inactive",
       '<button onclick="editReporter(' + r.id + ')">Edit</button><button class="gray" onclick="toggleReporter(' + r.id + ')">' +
       (r.active ? "Deactivate" : "Activate") + '</button><button class="gray" onclick="viewProfile(' + r.id + ')">Profile</button>']
   })));
@@ -244,7 +244,7 @@ function editReporter(id) {
   setv("r_id", r.id); setv("r_sid", r.sid); setv("r_name", r.name); setv("r_dept", r.dept);
   setv("r_position", r.position); setv("r_phone", r.phone); setv("r_email", r.email);
   setv("r_address", r.address); setv("r_type", r.type);
- // setv("r_course", r.course); )
+  setv("r_course", r.course); 
   window.scrollTo(0, 0);
 }
 
@@ -338,15 +338,25 @@ function saveIncident() {
     date: v("i_date"), time: v("i_time"), severity: v("i_severity"), desc: v("i_desc"), response: v("i_response")
   };
   if (d.reporter == "") { msg("i_msg", "Reporter is required.", false); return; }
+
   if (d.category == "") { msg("i_msg", "Incident category is required.", false); return; }
+
   if (d.type == "") { msg("i_msg", "Incident type is required.", false); return; }
+
   if (d.location == "") { msg("i_msg", "Location is required.", false); return; }
+
   if (d.date == "" || d.time == "") { msg("i_msg", "Date and time of incident are required.", false); return; }
+
   if (isNaN(new Date(d.date))) { msg("i_msg", "Incident date is invalid.", false); return; }
+
   if (d.date > new Date().toISOString().slice(0, 10)) { msg("i_msg", "Incident date cannot be in the future.", false); return; }
+
   if (d.severity == "") { msg("i_msg", "Severity must be selected.", false); return; }
+
   if (d.desc == "") { msg("i_msg", "Description cannot be empty.", false); return; }
+
   if (find(db.types, d.type).cat != d.category) { msg("i_msg", "Type does not belong to the category.", false); return; }
+  
   const count = db.incidents.length + 1;
   d.id = nextId(db.incidents);
   d.number = "INC-" + new Date().getFullYear() + "-" + String(count).padStart(4, "0");
@@ -605,4 +615,4 @@ function deleteCourse(id) {
   toast("Course deleted.");
 }
 
-showPage("home");
+showPage("home")
