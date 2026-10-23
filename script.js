@@ -5,11 +5,15 @@ let db = JSON.parse(localStorage.getItem("irs")) || startData();
 let currentPage = "home";
 if (!db.courses) db.courses = defaultCourses();
 
+
 function startData() {
   return {
-    departments: [{ id: 1, name: "IT Department" }, { id: 2, name: "Engineering" },
-                  { id: 3, name: "Administration" }, { id: 4, name: "Facilities" },
-                  { id: 5, name: "Student Affairs" }],
+    departments: [
+      { id: 1, name: "IT Department" }, { id: 2, name: "Engineering" },
+      { id: 3, name: "Administration" }, { id: 4, name: "Facilities" },
+      { id: 5, name: "Student Affairs" }
+    ],
+    
     courses: defaultCourses(),
     categories: ["Safety", "Security", "Accident", "Property Damage", "Workplace", "IT/Technical", "Environmental", "Health", "Other"]
       .map((n, i) => ({ id: i + 1, name: n, active: true })),
@@ -112,6 +116,7 @@ function fillAll() {
   ;
   fillTypes();
 }
+
 function showPage(page) {
   currentPage = page;
   document.querySelectorAll(".page").forEach(p => p.classList.remove("show"));
@@ -132,10 +137,12 @@ function showPage(page) {
   if (page == "courses") showCourses();
   
 }
+
 function showHome() {
   const lists = ["reporters", "incidents", "locations", "investigations", "actions"];
   document.getElementById("stats").innerHTML = lists.map(n => "<div><b>" + db[n].length + "</b>" + n + "</div>").join("");
 }
+
 function testConnection() {
   try {
     localStorage.setItem("irs_test", "1");
@@ -145,6 +152,7 @@ function testConnection() {
     msg("homeMsg", "Storage is blocked.", false);
   }
 }
+
 // Lab 2 and Lab 3(Used AI for some codes)
 function showDatabase() {
   const rows = [
@@ -330,16 +338,25 @@ function saveIncident() {
     date: v("i_date"), time: v("i_time"), severity: v("i_severity"), desc: v("i_desc"), response: v("i_response")
   };
   if (d.reporter == "") { msg("i_msg", "Reporter is required.", false); return; }
+
   if (d.category == "") { msg("i_msg", "Incident category is required.", false); return; }
+
   if (d.type == "") { msg("i_msg", "Incident type is required.", false); return; }
+
   if (d.location == "") { msg("i_msg", "Location is required.", false); return; }
+
   if (d.date == "" || d.time == "") { msg("i_msg", "Date and time of incident are required.", false); return; }
+
   if (isNaN(new Date(d.date))) { msg("i_msg", "Incident date is invalid.", false); return; }
+
   if (d.date > new Date().toISOString().slice(0, 10)) { msg("i_msg", "Incident date cannot be in the future.", false); return; }
+
   if (d.severity == "") { msg("i_msg", "Severity must be selected.", false); return; }
+
   if (d.desc == "") { msg("i_msg", "Description cannot be empty.", false); return; }
-  if (find(db.types, d.type).cat != d.category) { msg("i_msg", "Type does not belong to the category.", false); return;   
-  }
+
+  if (find(db.types, d.type).cat != d.category) { msg("i_msg", "Type does not belong to the category.", false); return; }
+  
   const count = db.incidents.length + 1;
   d.id = nextId(db.incidents);
   d.number = "INC-" + new Date().getFullYear() + "-" + String(count).padStart(4, "0");
@@ -352,6 +369,7 @@ function saveIncident() {
   msg("i_msg", "Incident " + d.number + " saved.", true);
   showIncidents();
 }
+
 // Lab 10 and Lab 12
 function showIncidents() {
   const s = v("i_search").toLowerCase();
@@ -439,14 +457,17 @@ function saveInvestigation() {
   showInvestigations();
   toast("Notification sent to " + x.investigator);
 }
+
 // Lab 18
 const steps = ["Assigned", "In Progress", "Evidence Gathering", "Findings Prepared", "Completed"];
+
 function showInvestigations() {
   drawTable("v_table", ["Investigation", "Investigator", "Start", "Deadline", "Status", "Completed On", "Action"], db.investigations.map(x => ({
     cells: [invName(x), x.investigator, x.start, x.target, x.status, x.done || "-",
       x.status == "Completed" ? "-" : '<button onclick="nextStep(' + x.id + ')">Next Status</button>']
   })));
 }
+
 function nextStep(id) {
   const x = find(db.investigations, id);
   x.status = steps[steps.indexOf(x.status) + 1];
@@ -454,6 +475,7 @@ function nextStep(id) {
   saveData();
   showInvestigations();
 }
+
 // Lab 16 and Lab 19
 function saveFinding() {
   const f = {
@@ -472,11 +494,13 @@ function saveFinding() {
   msg("f_msg", "Findings saved.", true);
   showFindings();
 }
+
 function showFindings() {
   drawTable("f_table", ["Investigation", "Problem", "Findings", "Root Cause", "Recommendation"], db.findings.map(f => ({
     cells: [invName(find(db.investigations, f.inv)), f.problem, f.findings, f.root, f.rec]
   })));
 }
+
 // Lab 17
 function saveEvidence() {
   const file = document.getElementById("e_file").files[0];
@@ -493,6 +517,7 @@ function saveEvidence() {
   msg("e_msg", "Evidence saved.", true);
   showEvidence();
 }
+
 function showEvidence() {
   drawTable("e_table", ["Investigation", "File", "Size (KB)", "Uploaded By", "Date", "Description"], db.evidence.map(e => ({
     cells: [invName(find(db.investigations, e.inv)), e.file, e.size, e.by, e.date, e.desc]
@@ -536,6 +561,8 @@ function nextAction(id) {
 function defaultCourses() {
   return ["BSIT", "BSBA", "BSED", "BSN", "BEED"].map((n, i) => ({ id: i + 1, name: n }));
 }
+
+
 function saveCourse() {
   const id = v("co_id"), name = v("co_name");
   if (name == "") { msg("co_msg", "Course name is required.", false); return; }
@@ -551,11 +578,13 @@ function saveCourse() {
   showCourses();
   toast("Course saved.");
 }
+
 function clearCourse() {
   setv("co_id", "");
   setv("co_name", "");
   msg("co_msg", "", true);
 }
+
 function showCourses() {
   const s = v("co_search").toLowerCase();
   const list = db.courses.filter(c => s == "" || c.name.toLowerCase().includes(s));
@@ -570,6 +599,7 @@ function editCourse(id) {
   setv("co_name", nameOf(db.courses, id));
   window.scrollTo(0, 0);
 }
+
 // D
 function deleteCourse(id) {
   if (db.reporters.some(r => r.course == id)) {
@@ -584,4 +614,5 @@ function deleteCourse(id) {
   msg("co_msg", "", true);
   toast("Course deleted.");
 }
+
 showPage("home")
