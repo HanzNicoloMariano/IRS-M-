@@ -30,7 +30,7 @@ function startData() {
       { id: 1, building: "Main Building", room: "IT Laboratory 2", area: "Laboratory", dept: 1, floor: "2nd", desc: "", active: true },
       { id: 2, building: "Main Building", room: "Registrar Office", area: "Office", dept: 3, floor: "1st", desc: "", active: true }
     ],
-    reporters: [{ id: 1, sid: "2024-0001", name: "Juan Dela Cruz", dept: 1, course: 1, position: "Lab Technician", phone: "09171234567", email: "juan@school.edu", address: "", type: "Employee", active: true }],
+    reporters: [{ id: 1, sid: "2024-0001", name: "Justin Japostol", dept: 1, course: 1, position: "Lab Technician", phone: "09171234567", email: "juan@school.edu", address: "", type: "Employee", active: true }],
     incidents: [], investigations: [], findings: [], evidence: [], actions: [], actionlog: [],
     resolutions: [], closures: [], notifications: [], audit: [],
     users: defaultUsers(), bugs: startBugs(), uat: { results: {}, ratings: {} },
