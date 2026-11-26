@@ -14,35 +14,21 @@
   <small>Forgot your password? Ask the Administrator to reset it.</small></div></div>
 <header>
   <h1>Incident Reporting System</h1>
-  <small>Hanz Nicolo C Mariano - BSIT 3A - Laboratories 1 to 63</small>
+  <small>Hanz Nicolo C Mariano  BSIT 3A </small>
   <nav></nav>
   <div id="userbar"></div>
 </header>
 <main>
 <section id="home" class="page">
   <h2>Home</h2>
-  <p>Workflow: Reporter, Incident, Location, Investigation, Action, Resolution, Reports, Testing, Deployment.</p>
+  <p>Workflow: Reporter, Incident, Location, Investigation, Action, Resolution, Reports.</p>
   <div id="stats" class="stats"></div>
   <div id="notif"></div>
-  <button onclick="testConnection()">Test Database Connection</button>
-  <p id="homeMsg"></p>
 </section>
 <section id="dashboard" class="page">
   <h2>Incident Management Dashboard</h2>
   <div id="db_kpi" class="kpis"></div>
   <div id="db_charts" class="charts"></div>
-</section>
-<section id="database" class="page">
-  <h2>Database Design</h2>
-  <h3>Relationships</h3>
-  <pre>Reporter 1 --- * Incident * --- 1 Location
-Incident 1 --- 1 Investigation 1 --- * Findings, Evidence, Actions
-Incident 1 --- 1 Resolution 1 --- 1 Closure
-User 1 --- * Notifications, Actions   (every change is written to the Audit log)</pre>
-  <h3>Data Dictionary</h3>
-  <div id="dictionary" class="scroll"></div>
-  <button onclick="testRelations()">Test Relationships</button><button class="gray" onclick="resetData()">Reset Data</button>
-  <p id="dbMsg"></p>
 </section>
 <section id="reporters" class="page">
   <h2>Reporters</h2>
@@ -251,70 +237,6 @@ User 1 --- * Notifications, Actions   (every change is written to the Audit log)
   <input id="co_search" placeholder="Search course" oninput="showCourses()">
   <div id="co_table" class="scroll"></div>
 </section>
-<section id="testing" class="page">
-  <h2>System Testing</h2>
-  <p>All tests except the data checks run on a temporary copy of the database, so your records are not changed.</p>
-  <div id="ts_btns"></div>
-  <label>Performance dataset <select id="pf_n"><option>1000</option><option selected>5000</option><option>10000</option></select></label>
-  <p id="ts_sum"></p>
-  <div id="ts_out" class="scroll"></div>
-  <h3>Incident Trace (Lab 33)</h3>
-<label>Incident <select id="ts_inc" onchange="showTrace()"></select></label>
-  <div id="ts_trace" class="scroll"></div>
-  <div id="pf_tmp" hidden></div>
-</section>
-<section id="uat" class="page">
-  <h2>User Acceptance Testing</h2>
-  <div id="uat_table" class="scroll"></div>
-  <h3>Evaluation (1 = poor, 5 = excellent)</h3>
-  <div id="uat_eval" class="scroll"></div>
-  <button onclick="saveUAT()">Save UAT</button>
-  <p id="uat_msg"></p>
-  <p id="uat_sum"></p>
-</section>
-<section id="bugs" class="page">
-  <h2>Bug Tracker</h2>
-  <div class="form">
-    <input type="hidden" id="b_id">
-    <label>Module <input id="b_module"></label>
-    <label>Problem <input id="b_problem"></label>
-    <label>Severity <select id="b_severity"></select></label>
-    <label>Corrective Action <input id="b_fix"></label>
-  </div>
-  <button onclick="saveBug()">Save Bug</button>
-  <p id="b_msg"></p>
-  <div id="b_table" class="scroll"></div>
-</section>
-<section id="backup" class="page">
-  <h2>Database Backup and Recovery</h2>
-  <button onclick="downloadBackup()">Create Backup (download)</button><button onclick="testRecovery()">Test Recovery</button>
-  <label>Restore from backup file <input type="file" id="bk_file" accept=".json"></label>
-  <button onclick="restoreBackup()">Restore Backup</button>
-  <p id="bk_msg"></p>
-  <div id="bk_table" class="scroll"></div>
-  <h3>Backup Procedure</h3>
-  <ol><li>Click Create Backup and keep the .json file in a safe place (it contains user data).</li><li>To recover, log in as Administrator, choose the file, click Restore Backup and confirm.</li><li>Check the record counts shown after the restore, then click Test Relationships on the Database page.</li><li>Run Test Recovery regularly to prove that backups can be restored.</li></ol>
-</section>
-<section id="deployment" class="page">
-  <h2>Deployment</h2>
-  <h3>Deployment Checklist (Labs 57 and 58)</h3>
-  <div id="dp_check" class="scroll"></div>
-  <h3>Production Settings</h3>
-  <div class="form">
-    <label>Mode <select id="dp_mode"><option>Testing</option><option>Production</option></select></label>
-    <label>Session timeout (minutes) <input type="number" id="dp_timeout" min="1" max="120"></label>
-    <label>Maximum upload size (MB) <input type="number" id="dp_max" min="1" max="20"></label>
-  </div>
-  <button onclick="saveSettings()">Save Settings</button><button class="gray" onclick="removeTests()">Remove Test Records</button><button class="gray" onclick="downloadBackup()">Create Backup</button><button onclick="postTest()">Run Post-Deployment Test (Lab 59)</button>
-  <p id="dp_msg"></p>
-  <div id="dp_post" class="scroll"></div>
-  <h3>Server Information</h3>
-  <div id="dp_info" class="scroll"></div>
-  <h3>How to Deploy</h3>
-  <pre>Local server:     python -m http.server 8000      then open http://localhost:8000
-School server:    copy index.html, style.css, script.js, access.js, reports.js, quality.js to the web folder (Apache htdocs, Nginx html or IIS wwwroot)
-Cloud server:     upload the same files to GitHub Pages, Netlify or any static host (HTTPS)</pre>
-</section>
 <section id="account" class="page">
   <h2>My Account</h2>
   <div class="form">
@@ -330,6 +252,5 @@ Cloud server:     upload the same files to GitHub Pages, Netlify or any static h
 <script src="script.js"></script>
 <script src="access.js"></script>
 <script src="reports.js"></script>
-<script src="quality.js"></script>
 </body>
 </html>
